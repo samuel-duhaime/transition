@@ -135,8 +135,10 @@ class AccessibilityMapForm extends ChangeEventsForm<AccessibilityMapFormProps, T
                 return;
             }
             this.polygonCalculated(currentResult);
-        } catch (error) {
-            // TODO: Handle error
+        } catch {
+            this.setState({
+                routingErrors: ['main:errors:ErrorCalculatingAccessibilityMap']
+            });
         } finally {
             serviceLocator.eventManager.emit('progress', { name: 'CalculateAccessibilityMap', progress: 1.0 });
             this.setState({ loading: false });
@@ -370,6 +372,9 @@ class AccessibilityMapForm extends ChangeEventsForm<AccessibilityMapFormProps, T
                     </Collapsible>
 
                     {this.hasInvalidFields() && <FormErrors errors={['main:errors:InvalidFormFields']} />}
+
+                    {this.state.routingErrors && <FormErrors errors={this.state.routingErrors} />}
+
                     <FormErrors errors={routing.errors} />
 
                     <div>
